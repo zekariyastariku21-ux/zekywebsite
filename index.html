@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>exercise dom.html</title>
+</head>
+<body style="width: 300px;">
+  <div style="
+    border: 5px solid rgb(36, 174, 238);
+    width: 260px;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: rgb(58, 255, 147);
+    ">
+    <h3>TO PLAY CLICK THE heads and tails BUTTTON</h3>
+    <button class="head" onclick="
+    playGame('head');
+    ">heads</button>
+    <button class="tail" onclick="
+      playGame('tail');
+    ">tails</button>
+
+    <p class="move"></p>
+    <p class="result"></p>
+    <p class="score"></p>
+
+
+    <button class="scores" onclick="
+      localStorage.removeItem('score') ;
+      score.wins = 0 ;
+      score.losses = 0 ;
+      updateScore();
+      resetButton();
+    ">RESET score</button>
+
+  <h3>amazon shiping calculator</h3>
+  <p>order under $40 = +$10 shiping</p>
+  <p>order over $40 = FREE shiping</p>
+
+  <input class="input" placeholder="cost of order">
+  <button onclick="
+    calculateTotal();
+  ">calculate</button>
+  <p class="totalCost"></p>
+
+  </div>
+  
+  <script>
+  
+    function calculateTotal(){
+      const inputElement = document.querySelector('.input') ;
+
+      let cost = Number(inputElement.value) ;
+
+      if(cost >=1 && cost < 40){
+        cost = cost + 10 ;
+      }
+      document.querySelector('.totalCost').innerHTML = `$${cost}`;
+    }
+    
+    document.querySelector('.cost')
+    document.querySelector('.totalCost')
+
+
+    let score = JSON.parse(localStorage.getItem('score')) || {wins : 0, losses : 0};
+    
+
+    function playGame(playerMove) {
+      const computerMove = pickComputerMove();
+      let result = '' ;
+
+      if(playerMove === 'head'){
+        if(computerMove === 'head'){
+          result = 'you win.'
+        }else if(computerMove === 'tail'){
+          result = 'you lose.'
+        }
+      }else if(playerMove === 'tail'){
+        if(computerMove === 'head'){
+          result = 'you lose.'
+        }else if(computerMove === 'tail'){
+          result = 'you win.'
+        }
+      }
+
+      if(result === 'you win.'){
+        score.wins += 1 ;
+      }else if(result === 'you lose.'){
+        score.losses += 1 ;
+      }
+      localStorage.setItem('score', JSON.stringify(score)) ;
+
+      document.querySelector('.result').innerHTML = result ;
+      document.querySelector('.move').innerHTML = `you pick - ${playerMove}. computer pick - ${computerMove}`; 
+      updateScore();
+      resetButtonBack()
+    }
+
+    function updateScore() {
+      document.querySelector('.score').innerHTML = ` score - wins: ${score.wins}. losses: ${score.losses}`;
+      
+    }
+    function resetButton(){
+      let reset = document.querySelector('.scores');
+      
+      if(reset.innerText === 'RESET score'){
+        reset.innerText = 'RESETED'
+      }
+    }
+    function resetButtonBack(){
+      let reset = document.querySelector('.scores');
+      if(reset.innerText === 'RESETED') {
+        reset.innerHTML = 'RESET score'
+      }
+    }
+
+    function pickComputerMove() {
+
+      const randomNumber = Math.random();
+      let computerMove = '' ;
+      if(randomNumber <= 1 / 2){
+        computerMove = 'head' ;
+      }else if(randomNumber > 1/2){
+        computerMove = 'tail' ;
+      }
+
+      return(computerMove) ;
+    }
+  </script>
+</body>
+</html>
